@@ -20,7 +20,9 @@ module.exports = clova.Client
     console.log('onLaunchRequest');
     
     const speech = [
-        clova.SpeechBuilder.createSpeechText('こんにちは！トラベルプランへようこそ。あなたに合った旅行プランをお探しします。行き先は国内ですか？海外ですか？')
+        clova.SpeechBuilder.createSpeechUrl('https://clova-soundlib.line-scdn.net/clova_behavior_door_knock.mp3'),
+        clova.SpeechBuilder.createSpeechUrl('https://clova-soundlib.line-scdn.net/clova_behavior_door_open.mp3'),
+        clova.SpeechBuilder.createSpeechText('こんにちは！トラベルカンパニーへようこそ。あなたに合った旅行プランをお探しします。行き先は国内ですか？海外ですか？')
       ];
     
     responseHelper.setSpeechList(speech);
@@ -36,7 +38,7 @@ module.exports = clova.Client
       // ヘルプ
       case 'Clova.GuideIntent':
         const helpSpeech = [
-          clova.SpeechBuilder.createSpeechText('スキルの説明をします。あなたに合った、トラベルプランをご提供いたします。お気に召しましたら、お申し込みできます。'),
+          clova.SpeechBuilder.createSpeechText('スキルの説明をします。あなたに合った、旅行プランをご提供いたします。お気に召しましたら、お申し込みできます。'),
           clova.SpeechBuilder.createSpeechText('行き先は国内ですか？海外ですか？')];
         responseHelper.setSpeechList(helpSpeech);
         responseHelper.setReprompt(getRepromptMsg(clova.SpeechBuilder.createSpeechText('行き先は国内ですか？海外ですか？')));
@@ -68,9 +70,9 @@ module.exports = clova.Client
         await sendLineBot(userId, jsonData[type])
           .then(() => {
             if (place === '海外') {
-              placeSpeech.push(clova.SpeechBuilder.createSpeechText('海外のおすすめプランをボットに送信しました。ご確認くださいませ。'));
+              placeSpeech.push(clova.SpeechBuilder.createSpeechText('海外のおすすめプランをボットに送信しました。ご確認ください。'));
             } else {
-              placeSpeech.push(clova.SpeechBuilder.createSpeechText('国内のおすすめプランをボットに送信しました。ご確認くださいませ。'));
+              placeSpeech.push(clova.SpeechBuilder.createSpeechText('国内のおすすめプランをボットに送信しました。ご確認ください。'));
             }
           })
           .catch((err) => {
@@ -78,6 +80,8 @@ module.exports = clova.Client
             placeSpeech.push(clova.SpeechBuilder.createSpeechText('botを連携させてください。'));
           });
         
+        placeSpeech.push(clova.SpeechBuilder.createSpeechText('また、ご利用くださいませ。'));
+        placeSpeech.push(clova.SpeechBuilder.createSpeechUrl('https://clova-soundlib.line-scdn.net/clova_behavior_door_close.mp3'));
         responseHelper.setSpeechList(placeSpeech);
         responseHelper.endSession();
         break;
